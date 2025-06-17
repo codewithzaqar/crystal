@@ -19,7 +19,7 @@ class CrystalApp(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
 
         # Sidebar
-        self.sidebar = SidebarFrame(self, self.note_manager, self.load_note)
+        self.sidebar = SidebarFrame(self, self.note_manager, self.load_note, self.delete_note)
         self.sidebar.grid(row=0, column=0, sticky="ns", padx=5, pady=5)
 
         # Editor
@@ -30,3 +30,10 @@ class CrystalApp(ctk.CTk):
         """Callback to load a note into the editor."""
         content = self.note_manager.load_note(note_title)
         self.editor.set_note_content(note_title, content)
+
+    def delete_note(self, note_title):
+        """Callback to delete a note and refresh UI."""
+        self.note_manager.delete_note(note_title)
+        self.sidebar.update_note_list()
+        if self.editor.current_note == note_title:
+            self.editor.set_note_content("No Note Selected", "")
